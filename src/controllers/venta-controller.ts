@@ -10,7 +10,6 @@ import { inspect } from "util";
 import { BaseResponse } from "../base-response";
 
 export let getAll = async (req: Request, res: Response) => {
-  console.log("GET => GetAll");
   let ventaRepo: VentaRepo = new VentaRepo();
   let baseResponse: BaseResponse = new BaseResponse();
 
@@ -20,7 +19,6 @@ export let getAll = async (req: Request, res: Response) => {
     baseResponse.response = ventas;
   }
   catch (e) {
-    console.log(e);
     baseResponse.success = false;
     baseResponse.response = JSON.stringify(e);
   }
@@ -28,8 +26,26 @@ export let getAll = async (req: Request, res: Response) => {
   res.send(baseResponse);
 };
 
+export let getDeuda = async (req: any, res: Response) => {
+  let ventaRepo: VentaRepo = new VentaRepo();
+  let baseResponse: BaseResponse = new BaseResponse();
+  try {
+    const id = req.params.id;
+    let venta = await ventaRepo.getDeuda(id);
+    baseResponse.success = true;
+    baseResponse.response = venta;
+  }
+  catch (e) {
+    baseResponse.success = false;
+    baseResponse.response = JSON.stringify(e);
+  }
+
+  res.send(baseResponse);
+};
+
+
+
 export let getOne = async (req: any, res: Response) => {
-  console.log("GET => getOne");
   let ventaRepo: VentaRepo = new VentaRepo();
   let baseResponse: BaseResponse = new BaseResponse();
 
@@ -40,7 +56,6 @@ export let getOne = async (req: any, res: Response) => {
     baseResponse.response = venta;
   }
   catch (e) {
-    console.log(e);
     baseResponse.success = false;
     baseResponse.response = JSON.stringify(e);
   }
@@ -49,7 +64,6 @@ export let getOne = async (req: any, res: Response) => {
 };
 
 export let save_header = async (req: Request, res: Response) => {
-  console.log("POST => Save");
   //Create the Repo objects
   let ventaRepo: VentaRepo = new VentaRepo();
   let usuarioRepo: UsuarioRepo = new UsuarioRepo();
@@ -72,13 +86,11 @@ export let save_header = async (req: Request, res: Response) => {
     ventaEntity.fechaCreacion = new Date();
 
     let venta_saved = await ventaRepo.save(ventaEntity);
-    console.log(venta_saved);
 
     baseResponse.success = true;
     baseResponse.response = JSON.stringify('success');
   }
   catch (e) {
-    console.log(inspect(e));
     baseResponse.success = false;
     baseResponse.response = JSON.stringify(inspect(e));
   }
@@ -86,7 +98,6 @@ export let save_header = async (req: Request, res: Response) => {
 }
 
 export let save = async (req: Request, res: Response) => {
-  console.log("POST => Save");
   //Create the Repo objects
   let ventaRepo: VentaRepo = new VentaRepo();
   let usuarioRepo: UsuarioRepo = new UsuarioRepo();
@@ -109,7 +120,6 @@ export let save = async (req: Request, res: Response) => {
     ventaEntity.persona = await personaRepo.getOne(venta_req.personaId);
     ventaEntity.fechaCreacion = new Date();
     let venta_saved = await ventaRepo.save(ventaEntity);
-    console.log(venta_saved);
 
     //Iterate through venta details and save venta details
     venta_req.venta_detalle.forEach(async (venta_det: any) => {
@@ -126,14 +136,12 @@ export let save = async (req: Request, res: Response) => {
       ventaDetalle.venta = venta_saved;
       //Save venta details
       let ventaDetalle_saved = await ventaDetalleRepo.save(ventaDetalle);
-      console.log(ventaDetalle_saved);
     });
 
     baseResponse.success = true;
     baseResponse.response = JSON.stringify('success');
   }
   catch (e) {
-    console.log(inspect(e));
     baseResponse.success = false;
     baseResponse.response = JSON.stringify(inspect(e));
   }
@@ -141,7 +149,6 @@ export let save = async (req: Request, res: Response) => {
 }
 
 export let save_Cascade = async (req: Request, res: Response) => {
-  console.log("POST => Save_Cascade");
   //Create the Repo objects
   let ventaRepo: VentaRepo = new VentaRepo();
   let usuarioRepo: UsuarioRepo = new UsuarioRepo();
@@ -180,13 +187,11 @@ export let save_Cascade = async (req: Request, res: Response) => {
 
     //Save venta first
     let venta_saved = await ventaRepo.save(ventaEntity);
-    console.log(venta_saved);
 
     baseResponse.success = true;
     baseResponse.response = JSON.stringify('success');
   }
   catch (e) {
-    console.log(inspect(e));
     baseResponse.success = false;
     baseResponse.response = JSON.stringify(inspect(e));
   }
@@ -194,7 +199,6 @@ export let save_Cascade = async (req: Request, res: Response) => {
 }
 
 export let remove = async (req: any, res: Response) => {
-  console.log("DELETE ==> Delete");
   let ventaRepo: VentaRepo = new VentaRepo();
   let baseResponse: BaseResponse = new BaseResponse();
 
@@ -202,12 +206,10 @@ export let remove = async (req: any, res: Response) => {
     const id = req.params.id;
     let data = await ventaRepo.getOne(id);
     let result = await ventaRepo.delete(data);
-    console.log(result);
     baseResponse.success = true;
     baseResponse.response = JSON.stringify('success');
   }
   catch (e) {
-    console.log(inspect(e));
     baseResponse.success = false;
     baseResponse.response = JSON.stringify(inspect(e));
   }

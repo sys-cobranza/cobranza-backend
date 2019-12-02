@@ -4,7 +4,10 @@ import { getManager } from "typeorm";
 export class ProductoRepo {
 
     getAll() {
-        return getManager().getRepository(ProductoEntity).find();
+        return getManager().getRepository(ProductoEntity)
+            .createQueryBuilder("producto")
+            .innerJoinAndSelect("producto.usuario_crea", "usuario")
+            .getMany();
     }
 
     save(producto: ProductoEntity) {

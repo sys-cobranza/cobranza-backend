@@ -45,6 +45,7 @@ app.listen(app.get("port"), () => {
 app.get("/api/usuario/all", usuarioController.getAll);
 app.post("/api/usuario/save", usuarioController.save);
 app.delete("/api/usuario/delete", usuarioController.remove);
+app.post("/api/usuario/login", usuarioController.login);
 
 app.get("/api/persona/all", personaController.getAll);
 app.post("/api/persona/save", personaController.save);
@@ -55,14 +56,15 @@ app.post("/api/producto/save", productoController.save);
 app.delete("/api/producto/delete", productoController.remove);
 
 app.get("/api/venta/all", ventaController.getAll);
+app.get("/api/venta/deuda/:id", ventaController.getDeuda);
 app.post("/api/venta/save", ventaController.save_header);
 app.post("/api/venta/save-all", ventaController.save);
 app.post("/api/venta/save-cascade", ventaController.save_Cascade);
 app.delete("/api/venta/delete", ventaController.remove);
 
-app.get("/api/venta/all", ventaDetalleController.getAll);
-app.post("/api/venta/save", ventaDetalleController.save);
-app.delete("/api/venta/delete", ventaDetalleController.remove);
+app.get("/api/venta/cobro/all", ventaDetalleController.getAll);
+app.post("/api/venta/cobro/save", ventaDetalleController.save);
+app.delete("/api/venta/cobro/delete", ventaDetalleController.remove);
 
 /**
  * Create connection to DB using configuration provided in 

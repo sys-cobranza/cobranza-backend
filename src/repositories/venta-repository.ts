@@ -4,7 +4,14 @@ import { getManager } from "typeorm";
 export class VentaRepo {
 
     getAll() {
-        return getManager().getRepository(VentaEntity).find();
+        return getManager().getRepository(VentaEntity)
+            .createQueryBuilder("venta")
+            .leftJoinAndSelect("venta.venta_detalle", "venta_detalle")
+            .leftJoinAndSelect("venta_detalle.usuario_crea", "usuario_crea")
+            .innerJoinAndSelect("venta.persona", "persona")
+            .innerJoinAndSelect("venta.usuario_crea", "usuario")
+            .select()
+            .getMany();
     }
 
     save(venta: VentaEntity) {
@@ -21,6 +28,23 @@ export class VentaRepo {
 
     getOne(id: number) {
         return getManager().getRepository(VentaEntity).findOne(id);
+    }
+
+    getDeuda(clientId: number) {
+        return getManager().getRepository(VentaEntity)
+            .createQueryBuilder("venta")
+            .leftJoinAndSelect("venta.venta_detalle", "venta_detalle")
+            .innerJoinAndSelect("venta.persona", "persona")
+            .select("venta.id")
+            .addSelect("venta.fecha")
+            .addSelect("venta.cuotaDiaria")
+            .addSelect("venta.montoVenta")
+            .addSelect("SUM(venta_detalle.montoCobro)", "venta_MontoCobro")
+            .addSelect("venta.montoVenta-COALESCE(SUM(venta_detalle.montoCobro),0)", "venta_Deuda")
+            .groupBy("venta.id")
+            .where("persona.id = :id", { id: clientId })
+            .having("venta_Deuda > :deuda", { deuda: 0 })
+            .getRawMany();
     }
 
     findOne(venta: VentaEntity) {

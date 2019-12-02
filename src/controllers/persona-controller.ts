@@ -6,7 +6,6 @@ import { PersonaEntity } from "../entities/persona-entity";
 import { BaseResponse } from "../base-response";
 
 export let getAll = async (req: Request, res: Response) => {
-    console.log("GET => getAll");
     let personaRepo: PersonaRepo = new PersonaRepo();
     let baseResponse: BaseResponse = new BaseResponse();
 
@@ -16,7 +15,6 @@ export let getAll = async (req: Request, res: Response) => {
         baseResponse.response = personas;
     }
     catch (e) {
-        console.log(e);
         baseResponse.success = false;
         baseResponse.response = JSON.stringify(e);
     }
@@ -25,7 +23,6 @@ export let getAll = async (req: Request, res: Response) => {
 };
 
 export let getOne = async (req: any, res: Response) => {
-    console.log("GET => getOne");
     let personaRepo: PersonaRepo = new PersonaRepo();
     let baseResponse: BaseResponse = new BaseResponse();
 
@@ -36,7 +33,6 @@ export let getOne = async (req: any, res: Response) => {
         baseResponse.response = persona;
     }
     catch (e) {
-        console.log(e);
         baseResponse.success = false;
         baseResponse.response = JSON.stringify(e);
     }
@@ -45,7 +41,6 @@ export let getOne = async (req: any, res: Response) => {
 };
 
 export let save = async (req: Request, res: Response) => {
-    console.log("POST => Save");
     let personaRepo: PersonaRepo = new PersonaRepo();
     let personaEntity: PersonaEntity = new PersonaEntity();
     let baseResponse: BaseResponse = new BaseResponse();
@@ -62,12 +57,10 @@ export let save = async (req: Request, res: Response) => {
         //  personaEntity.usuario_crea = await usuarioRepo.getOne(req.body.usuarioCreaId);
         personaEntity.fechaCreacion = new Date();
         let result = await personaRepo.save(personaEntity);
-        console.log(result);
         baseResponse.success = true;
         baseResponse.response = JSON.stringify('success');
     }
     catch (e) {
-        console.log(inspect(e));
         baseResponse.success = false;
         baseResponse.response = JSON.stringify(inspect(e));
     }
@@ -75,7 +68,6 @@ export let save = async (req: Request, res: Response) => {
 }
 
 export let remove = async (req: any, res: Response) => {
-    console.log("DELETE ==> Delete");
     let personaRepo: PersonaRepo = new PersonaRepo();
     let baseResponse: BaseResponse = new BaseResponse();
 
@@ -83,12 +75,10 @@ export let remove = async (req: any, res: Response) => {
         const id = req.params.id;
         let persona = await personaRepo.getOne(id);
         let result = await personaRepo.delete(persona);
-        console.log(result);
         baseResponse.success = true;
         baseResponse.response = JSON.stringify('success');
     }
     catch (e) {
-        console.log(inspect(e));
         baseResponse.success = false;
         baseResponse.response = JSON.stringify(inspect(e));
     }

@@ -1,13 +1,13 @@
 import { VentaEntity } from './venta-entity';
-import { UsuarioEntity } from './usuario-entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, OneToOne, JoinColumn, ManyToOne } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, Index } from "typeorm";
 
 @Entity("persona")
 export class PersonaEntity {
 
     @PrimaryGeneratedColumn({ name: "Id", type: "smallint" })
     id: number;
-
+    
+    @Index({ unique: true })
     @Column({ name: "NumeroDocumento", length: 11 })
     numeroDocumento: string;
 

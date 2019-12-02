@@ -8,7 +8,6 @@ import { inspect } from "util";
 import { BaseResponse } from "../base-response";
 
 export let getAll = async (req: Request, res: Response) => {
-    console.log("GET => GetAll");
     let ventaDetalleRepo: VentaDetalleRepo = new VentaDetalleRepo();
     let baseResponse: BaseResponse = new BaseResponse();
 
@@ -18,7 +17,6 @@ export let getAll = async (req: Request, res: Response) => {
         baseResponse.response = ventaDetalle;
     }
     catch (e) {
-        console.log(e);
         baseResponse.success = false;
         baseResponse.response = JSON.stringify(e);
     }
@@ -27,7 +25,6 @@ export let getAll = async (req: Request, res: Response) => {
 };
 
 export let getOne = async (req: any, res: Response) => {
-    console.log("GET => getOne");
     let ventaDetalleRepo: VentaDetalleRepo = new VentaDetalleRepo();
     let baseResponse: BaseResponse = new BaseResponse();
 
@@ -38,7 +35,6 @@ export let getOne = async (req: any, res: Response) => {
         baseResponse.response = venta;
     }
     catch (e) {
-        console.log(e);
         baseResponse.success = false;
         baseResponse.response = JSON.stringify(e);
     }
@@ -46,7 +42,6 @@ export let getOne = async (req: any, res: Response) => {
     res.send(baseResponse);
 };
 export let save = async (req: Request, res: Response) => {
-    console.log("POST => Save");
     //Create the Repo objects
     let ventaRepo: VentaRepo = new VentaRepo();
     let usuarioRepo: UsuarioRepo = new UsuarioRepo();
@@ -68,12 +63,10 @@ export let save = async (req: Request, res: Response) => {
         ventaDetalleEntity.fechaCreacion = new Date();
 
         let venta_saved = await ventaDetalleRepo.save(ventaDetalleEntity);
-        console.log(venta_saved);
         baseResponse.success = true;
         baseResponse.response = JSON.stringify('success');
     }
     catch (e) {
-        console.log(inspect(e));
         baseResponse.success = false;
         baseResponse.response = JSON.stringify(inspect(e));
     }
@@ -81,7 +74,6 @@ export let save = async (req: Request, res: Response) => {
 }
 
 export let remove = async (req: any, res: Response) => {
-    console.log("DELETE ==> Delete");
     let ventaDetalleRepo: VentaDetalleRepo = new VentaDetalleRepo();
     let baseResponse: BaseResponse = new BaseResponse();
 
@@ -89,12 +81,10 @@ export let remove = async (req: any, res: Response) => {
         const id = req.params.id;
         let data = await ventaDetalleRepo.getOne(id);
         let result = await ventaDetalleRepo.delete(data);
-        console.log(result);
         baseResponse.success = true;
         baseResponse.response = JSON.stringify('success');
     }
     catch (e) {
-        console.log(inspect(e));
         baseResponse.success = false;
         baseResponse.response = JSON.stringify(inspect(e));
     }
