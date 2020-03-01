@@ -8,18 +8,21 @@ import { PersonaRepo } from "../repositories/persona-repository";
 export let login = async (req: Request, res: Response) => {
   let usuarioRepo: UsuarioRepo = new UsuarioRepo();
   let baseResponse: BaseResponse = new BaseResponse();
-
   try {
     let userName = req.body.userName;
     let password = req.body.password;
-    let users = await usuarioRepo.login(userName, password);
+    let user = await usuarioRepo.login(userName, password);
     baseResponse.success = true;
-    baseResponse.response = users;
+    if (!user) {
+      baseResponse.success = false;
+    }
+    baseResponse.response = user;
   }
   catch (e) {
     baseResponse.success = false;
     baseResponse.response = JSON.stringify(e);
   }
+
   res.send(baseResponse);
 };
 
@@ -80,3 +83,4 @@ export let remove = async (req: any, res: Response) => {
   }
   res.send(baseResponse);
 }
+

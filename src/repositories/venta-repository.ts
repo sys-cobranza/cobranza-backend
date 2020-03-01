@@ -47,6 +47,27 @@ export class VentaRepo {
             .getRawMany();
     }
 
+    getDeudaClientes(client: String) {
+        return getManager().getRepository(VentaEntity)
+            .createQueryBuilder("venta")
+            .limit(10)
+            .leftJoinAndSelect("venta.venta_detalle", "venta_detalle")
+            .innerJoinAndSelect("venta.persona", "persona")
+            .select("venta.id","id")
+            .addSelect("persona.id","personaId")
+            .addSelect("venta.fecha","fecha")
+            .addSelect("persona.nombre","nombre")
+            .addSelect("persona.apellidos","apellidos")
+            .addSelect("persona.numeroDocumento","numeroDocumento")
+            .addSelect("SUM(venta_detalle.montoCobro)", "montoCobro")
+            .addSelect("venta.montoVenta-COALESCE(SUM(venta_detalle.montoCobro),0)", "montoDeuda")
+            .groupBy("venta.id")
+            .where("persona.nombreCompleto like :cliente", { cliente: '%' + client + '%' })
+            .having("montoDeuda > :deuda", { deuda: 0 })
+            .getRawMany();
+    }
+
+
     findOne(venta: VentaEntity) {
         return getManager().getRepository(VentaEntity).findOne(venta);
     }

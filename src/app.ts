@@ -66,6 +66,15 @@ app.get("/api/venta/cobro/all", ventaDetalleController.getAll);
 app.post("/api/venta/cobro/save", ventaDetalleController.save);
 app.delete("/api/venta/cobro/delete", ventaDetalleController.remove);
 
+
+/*App Movil Endpoints */
+app.get("/api/venta/cobro/now-all/:id", ventaDetalleController.getCobroNow);
+app.get("/api/venta/cobro/not-now-all/:id", ventaDetalleController.getCobroNotNow);
+app.get("/api/venta/cobro/now-total/:id", ventaDetalleController.getCobroTotalNow);
+app.post("/api/venta/deuda/cliente", ventaController.getDeudaClientes);
+
+
+
 /**
  * Create connection to DB using configuration provided in 
  * appconfig file.

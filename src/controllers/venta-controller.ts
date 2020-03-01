@@ -43,7 +43,22 @@ export let getDeuda = async (req: any, res: Response) => {
   res.send(baseResponse);
 };
 
+export let getDeudaClientes = async (req: any, res: Response) => {
+  let ventaRepo: VentaRepo = new VentaRepo();
+  let baseResponse: BaseResponse = new BaseResponse();
+  try {
+    const body = req.body;;
+    let venta = await ventaRepo.getDeudaClientes(body.filter);
+    baseResponse.success = true;
+    baseResponse.response = venta;
+  }
+  catch (e) {
+    baseResponse.success = false;
+    baseResponse.response = JSON.stringify(e);
+  }
 
+  res.send(baseResponse);
+};
 
 export let getOne = async (req: any, res: Response) => {
   let ventaRepo: VentaRepo = new VentaRepo();

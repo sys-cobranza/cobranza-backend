@@ -24,6 +24,64 @@ export let getAll = async (req: Request, res: Response) => {
     res.send(baseResponse);
 };
 
+
+export let getCobroNow = async (req: Request, res: Response) => {
+    let ventaDetalleRepo: VentaDetalleRepo = new VentaDetalleRepo();
+    let baseResponse: BaseResponse = new BaseResponse();
+
+    try {
+        const id = Number(req.params.id);
+        let ventaDetalle = await ventaDetalleRepo.getCobroNow(id);
+        baseResponse.success = true;
+        baseResponse.response = ventaDetalle;
+    }
+    catch (e) {
+        baseResponse.success = false;
+        baseResponse.response = JSON.stringify(e);
+    }
+
+    res.send(baseResponse);
+};
+
+export let getCobroNotNow = async (req: Request, res: Response) => {
+    let ventaDetalleRepo: VentaDetalleRepo = new VentaDetalleRepo();
+    let baseResponse: BaseResponse = new BaseResponse();
+
+    try {
+        const id = Number(req.params.id);
+        let ventaDetalle = await ventaDetalleRepo.getCobroNotNow(id);
+        baseResponse.success = true;
+        baseResponse.response = ventaDetalle;
+    }
+    catch (e) {
+        baseResponse.success = false;
+        baseResponse.response = JSON.stringify(e);
+    }
+
+    res.send(baseResponse);
+};
+
+
+export let getCobroTotalNow = async (req: Request, res: Response) => {
+    let ventaDetalleRepo: VentaDetalleRepo = new VentaDetalleRepo();
+    let baseResponse: BaseResponse = new BaseResponse();
+
+    try {
+        const id = Number(req.params.id);
+        let ventaDetalle = await ventaDetalleRepo.getCobroTotalNow(id);
+        baseResponse.success = true;
+        baseResponse.response = ventaDetalle;
+    }
+    catch (e) {
+        baseResponse.success = false;
+        baseResponse.response = JSON.stringify(e);
+    }
+
+    res.send(baseResponse);
+};
+
+
+
 export let getOne = async (req: any, res: Response) => {
     let ventaDetalleRepo: VentaDetalleRepo = new VentaDetalleRepo();
     let baseResponse: BaseResponse = new BaseResponse();
@@ -51,10 +109,11 @@ export let save = async (req: Request, res: Response) => {
     let baseResponse: BaseResponse = new BaseResponse();
 
     try {
+        console.log(req.body);
         let venta_req = req.body;
         ventaDetalleEntity.id = venta_req.id;
         ventaDetalleEntity.descripcion = venta_req.descripcion;
-        ventaDetalleEntity.fecha = venta_req.fecha;
+        ventaDetalleEntity.fecha = venta_req.fecha || new Date();
         ventaDetalleEntity.montoCobro = venta_req.montoCobro;
         //Get producto entity which is already peristed in DB
         ventaDetalleEntity.usuario_crea = await usuarioRepo.getOne(venta_req.usuarioCreaId);
